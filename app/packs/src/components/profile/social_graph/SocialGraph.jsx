@@ -132,10 +132,10 @@ const SocialGraph = ({ talent }) => {
         // transform response to proper format for graphology
         return transformResponseToGraphData(json);
       })
-      .then(dataset => {
-        setDataset(dataset);
+      .then(data => {
+        setDataset(data);
         setFiltersState({
-          clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true))
+          clusters: mapValues(keyBy(data.clusters, "key"), constant(true))
         });
         requestAnimationFrame(() => setDataReady(true));
       });
