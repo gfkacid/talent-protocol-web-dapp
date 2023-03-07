@@ -145,6 +145,7 @@ const SocialGraph = ({ talent }) => {
   return (
     <div id="social-graph-wrapper" className={`social-graph-wrapper ` + (showContents ? "show-contents" : "")}>
       <SigmaContainer
+        style={{height: "500px"}}
         graphOptions={{ type: "directed" }}
         settings={{
           nodeProgramClasses: { image: getNodeProgramImage() },
