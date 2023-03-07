@@ -19,7 +19,6 @@ const GraphDataController = ({ dataset, filters, children }) => {
     if (!graph || !dataset) return;
 
     const clusters = keyBy(dataset.clusters, "key");
-    console.log("dataset", dataset);
     dataset.nodes.forEach(node =>
       graph.addNode(node.key, {
         ...node,
@@ -45,7 +44,7 @@ const GraphDataController = ({ dataset, filters, children }) => {
       )
     );
 
-    // assign();
+    assign();
     sigma.getCamera().animatedUnzoom(1.2);
     return () => graph.clear();
   }, [assign, dataset]);

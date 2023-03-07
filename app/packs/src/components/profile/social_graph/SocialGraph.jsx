@@ -85,7 +85,6 @@ const SocialGraph = ({ talent }) => {
     ];
 
     // add self node
-    console.log(talent);
     nodes.push({
       key: talent.user.username,
       label: talent.user.name,
@@ -111,7 +110,7 @@ const SocialGraph = ({ talent }) => {
         cluster: getConnectionTypeCluster(connection.connection_type),
         x: 0,
         y: 0,
-        score: calculateScore(connection) //TODO: calculate size dynamically
+        score: calculateScore(connection)
       });
       edges.push([talent.user.username, connection.username]);
     });
@@ -134,7 +133,6 @@ const SocialGraph = ({ talent }) => {
         return transformResponseToGraphData(json);
       })
       .then(dataset => {
-        console.log(dataset);
         setDataset(dataset);
         setFiltersState({
           clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true))
@@ -145,7 +143,7 @@ const SocialGraph = ({ talent }) => {
 
   if (!dataset) return null;
   return (
-    <div id="social-graph-wrapper" className={`social-graph-wrapper` + (showContents ? "show-contents" : "")}>
+    <div id="social-graph-wrapper" className={`social-graph-wrapper ` + (showContents ? "show-contents" : "")}>
       <SigmaContainer
         graphOptions={{ type: "directed" }}
         settings={{

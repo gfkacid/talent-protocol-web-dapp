@@ -32,8 +32,12 @@
 	.social-graph-wrapper,
 	.sigma-container {
 		position: absolute;
+    width:100%;
+    min-height: 500%;
+    height: auto;
 		inset: 0;
 	}
+  
 	.controls {
 		position: absolute;
 		bottom: 8px;
