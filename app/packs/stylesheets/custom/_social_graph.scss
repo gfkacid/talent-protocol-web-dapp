@@ -110,7 +110,7 @@
 		opacity: 0.7;
 	}
 	button.btn > * {
-		vertical-align: baseline;
+		vertical-align: middle;
 	}
 	.buttons {
 		display: flex;
@@ -306,4 +306,48 @@
 		height: 100%;
 		width: 100%;
 	}
+}
+
+.light-body .social-graph {
+  background: $light-bg-01;
+	color: $light-text-primary-01;
+
+  div.ico > button{
+    color: $light-text-primary-01;
+    background: $light-bg-transparent;
+    
+  }
+
+  button.btn {
+    background: $light-bg-01;
+    color: $light-bg-text-primary-01;
+  }
+  
+  .panel {
+    background: $light-bg-transparent;
+    
+  }
+  
+  .panel h2 button {
+    background: $light-bg-transparent;
+    color: #666;
+    
+  }
+  
+  .caption-row input[type="checkbox"]:not(:checked) + label .circle {
+    background-color: $light-bg-01 !important;
+    
+  }
+  
+  .search-wrapper > input[type="search"] {
+    background: $light-bg-transparent;
+    color: $light-bg-text-primary-01;
+  }
+  
+  @media (max-width: 767.98px) {
+    #social-graph-wrapper.show-contents .contents {
+      background: $light-bg-transparent;
+    }
+  }
+
 }
