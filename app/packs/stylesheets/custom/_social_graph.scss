@@ -320,7 +320,7 @@
 
   button.btn {
     background: $light-bg-01;
-    color: $light-bg-text-primary-01;
+    color: $light-text-primary-01;
   }
   
   .panel {
@@ -341,7 +341,7 @@
   
   .search-wrapper > input[type="search"] {
     background: $light-bg-transparent;
-    color: $light-bg-text-primary-01;
+    color: $light-text-primary-01;
   }
   
   @media (max-width: 767.98px) {
