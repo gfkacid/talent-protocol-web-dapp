@@ -12,6 +12,15 @@ const GraphDataController = ({ dataset, filters, children }) => {
     scale: 10
   });
 
+  const calcMinMaxFromSize = (size,min=true) => {
+    if(min){
+      if(size<30)return 10;
+      if(size>80)return 5;
+    }else{
+      if(size<30)return 50;
+      if(size>80)return 30;
+    }
+  }
   /**
    * Feed graphology with the new dataset:
    */
@@ -32,8 +41,8 @@ const GraphDataController = ({ dataset, filters, children }) => {
     const scores = graph.nodes().map(node => graph.getNodeAttribute(node, "score"));
     const minDegree = Math.min(...scores);
     const maxDegree = Math.max(...scores);
-    const MIN_NODE_SIZE = 20;
-    const MAX_NODE_SIZE = 50;
+    const MIN_NODE_SIZE = calcMinMaxFromSize(dataset.nodes.length);
+    const MAX_NODE_SIZE = calcMinMaxFromSize(dataset.nodes.length,false);
     graph.forEachNode(node =>
       graph.setNodeAttribute(
         node,

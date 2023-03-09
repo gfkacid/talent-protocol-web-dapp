@@ -10,6 +10,7 @@ import GraphDataController from "./GraphDataController";
 import ClustersPanel from "./ClustersPanel";
 import SearchField from "./SearchField";
 import drawLabel from "./canvas-utils";
+import { H4 } from "src/components/design_system/typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand, faCompress, faTimes, faColumns } from "@fortawesome/free-solid-svg-icons";
 
@@ -23,20 +24,22 @@ const SocialGraph = ({ talent }) => {
   const [hoveredNode, setHoveredNode] = useState(null);
 
   const talentToken = talent.talentToken;
-
+  const howManyConnections = 50;
   const getConnectionTypeCluster = type => {
     switch (type) {
       case "super_connection":
         return "1";
-      case "supporting":
-        return "2";
       case "supporter":
+        return "2";
+      case "supporting":
         return "3";
-      case "follower":
+      case "mutual_follow":
         return "4";
+      case "follower":
+        return "5";
       case "following":
       default:
-        return "5";
+        return "6";
     }
   };
 
@@ -51,6 +54,9 @@ const SocialGraph = ({ talent }) => {
         break;
       case "supporter":
         score = 1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
+        break;
+      case "mutual_follow":
+        score = 1.1;
         break;
       case "follower":
       case "following":
@@ -77,11 +83,12 @@ const SocialGraph = ({ talent }) => {
     let edges = [];
     const clusters = [
       { key: "0", color: "#6c3e81", clusterLabel: "Talent Profile" },
-      { key: "1", color: "#579f5f", clusterLabel: "Super Connection" },
-      { key: "2", color: "#57a835", clusterLabel: "Supporting" },
-      { key: "3", color: "#7145cd", clusterLabel: "Supporter" },
-      { key: "4", color: "#666666", clusterLabel: "Follower" },
-      { key: "5", color: "#d043c4", clusterLabel: "Following" }
+      { key: "1", color: "#bbed55", clusterLabel: "Super Connection" },
+      { key: "2", color: "#579f5f", clusterLabel: "Supporter" },
+      { key: "3", color: "#7145cd", clusterLabel: "Supporting" },
+      { key: "4", color: "#E1C3FF", clusterLabel: "Mutual Follow" },
+      { key: "5", color: "#328AFF", clusterLabel: "Follower" },
+      { key: "6", color: "#7aa1d5", clusterLabel: "Following" }
     ];
 
     // add self node
@@ -97,7 +104,7 @@ const SocialGraph = ({ talent }) => {
       cluster: "0",
       x: 0,
       y: 0,
-      score: 1
+      score: 1.5
     });
 
     // add connection nodes & edges
@@ -124,7 +131,7 @@ const SocialGraph = ({ talent }) => {
 
   // Load connections data on mount:
   useEffect(() => {
-    fetch(`/api/v1/connections?id=${talent.user.uuid}`)
+    fetch(`/api/v1/connections?id=${talent.user.uuid}&per_page=${howManyConnections}`)
       .then(res => {
         return res.json();
       })
@@ -144,6 +151,7 @@ const SocialGraph = ({ talent }) => {
   if (!dataset) return null;
   return (
     <div id="social-graph-wrapper" className={`social-graph-wrapper ` + (showContents ? "show-contents" : "")}>
+      <H4 className="text-center mb-3" text="Connections" />
       <SigmaContainer
         style={{height: "500px"}}
         graphOptions={{ type: "directed" }}
