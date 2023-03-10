@@ -14,8 +14,8 @@ const GraphDataController = ({ dataset, filters, children }) => {
 
   const calcMinMaxFromSize = (size,min=true) => {
     if(min){
-      if(size<30)return 10;
-      if(size>80)return 5;
+      if(size<30)return 24;
+      if(size>80)return 12;
     }else{
       if(size<30)return 50;
       if(size>80)return 30;
@@ -35,7 +35,7 @@ const GraphDataController = ({ dataset, filters, children }) => {
         image: node.profile_picture_url //`/images/person.svg`,
       })
     );
-    dataset.edges.forEach(([source, target]) => graph.addEdge(source, target, { size: 1 }));
+    // dataset.edges.forEach(([source, target]) => graph.addEdge(source, target, { size: 1 }));
 
     // Use degrees as node sizes:
     const scores = graph.nodes().map(node => graph.getNodeAttribute(node, "score"));

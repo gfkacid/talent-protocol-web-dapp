@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SigmaContainer, ZoomControl, FullScreenControl } from "@react-sigma/core";
-import { omit, mapValues, keyBy, constant } from "lodash";
+import { mapValues, keyBy, constant } from "lodash";
 import { ethers } from "ethers";
 
 import getNodeProgramImage from "sigma/rendering/webgl/programs/node.image";
@@ -8,7 +8,6 @@ import GraphSettingsController from "./GraphSettingsController";
 import GraphEventsController from "./GraphEventsController";
 import GraphDataController from "./GraphDataController";
 import ClustersPanel from "./ClustersPanel";
-import SearchField from "./SearchField";
 import drawLabel from "./canvas-utils";
 import { H4 } from "src/components/design_system/typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -102,11 +101,12 @@ const SocialGraph = ({ talent }) => {
         : "",
       URL: `https://beta.talentprotocol.com/u/${talent.user.username}`,
       cluster: "0",
+      profile_picture_url: talent.profile_picture_url
       x: 0,
       y: 0,
       score: 1.5
     });
-
+    
     // add connection nodes & edges
     response.connections.map((connection, i) => {
       nodes.push({
@@ -115,6 +115,7 @@ const SocialGraph = ({ talent }) => {
         coinLabel: buildCoinLabelString(connection),
         URL: `https://beta.talentprotocol.com/u/${connection.username}`,
         cluster: getConnectionTypeCluster(connection.connection_type),
+        profile_picture_url: connection.profile_picture_url,
         x: 0,
         y: 0,
         score: calculateScore(connection)
@@ -204,8 +205,6 @@ const SocialGraph = ({ talent }) => {
                 </button>
               </div>
               <div className="panels">
-                <SearchField filters={filtersState} />
-
                 <ClustersPanel
                   clusters={dataset.clusters}
                   filters={filtersState}

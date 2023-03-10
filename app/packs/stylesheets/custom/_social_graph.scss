@@ -10,7 +10,7 @@
 	margin: 0;
 	padding: 0;
   width: 100%;
-  height: 500px;
+  min-height: 500px;
 
 	h2 {
 		font-size: 1.3em;
@@ -311,6 +311,13 @@
 .light-body .social-graph {
   background: $light-bg-01;
 	color: $light-text-primary-01;
+
+  div.react-sigma {
+		height: 100%;
+		width: 100%;
+		position: relative;
+		background: $light-bg-01;
+	}
 
   div.ico > button{
     color: $light-text-primary-01;
