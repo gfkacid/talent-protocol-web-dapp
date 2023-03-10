@@ -178,7 +178,7 @@ const Notifications = ({ mode }) => {
 
   return (
     <>
-      <Dropdown drop="bottom" className="ml-2">
+      <Dropdown className="ml-2">
         <Dropdown.Toggle
           className="talent-button white-subtle-button normal-size-button no-caret"
           id="notifications-dropdown"

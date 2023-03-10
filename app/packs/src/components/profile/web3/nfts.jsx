@@ -147,7 +147,7 @@ const Nfts = ({ user, canUpdate, setShowLastDivider, onWalletConnect, railsConte
                 </ThemedButton>
               ) : (
                 <Web3ModalConnect
-                  user_id={userId}
+                  userId={userId}
                   onConnect={onWalletConnect}
                   railsContext={railsContext}
                   buttonClassName="primary-default-button mx-auto"

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import debounce from "lodash/debounce";
+import { loggedInUserStore } from "src/contexts/state";
 
 import { post, get } from "src/utils/requests";
 import { setupChannel, removeChannel } from "channels/message_channel";
@@ -10,9 +11,9 @@ import MessageUserList from "./MessageUserList";
 import MessageExchange from "./MessageExchange";
 import { useWindowDimensionsHook } from "../../utils/window";
 
-const Chat = ({ chats, user, pagination }) => {
+const Chat = ({ chats, pagination }) => {
   const url = new URL(document.location);
-  const [activeUserId, setActiveUserId] = useState(url.searchParams.get("user") || 0);
+  const [activeUserUsername, setActiveUserUsername] = useState(url.searchParams.get("user") || "");
   const [localChats, setLocalChats] = useState(chats);
   const [localPagination, setLocalPagination] = useState(pagination);
   const [perkId] = useState(url.searchParams.get("perk") || 0);
@@ -30,10 +31,11 @@ const Chat = ({ chats, user, pagination }) => {
   const { mobile } = useWindowDimensionsHook();
   const theme = useContext(ThemeContext);
 
-  const updateChats = (previousChats, newChat) => {
-    const receiverIndex = previousChats.findIndex(chat => chat.receiver_id === newChat.receiver_id);
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
-    console.log(previousChats, newChat)
+  const updateChats = (previousChats, newChat) => {
+    const receiverIndex = previousChats.findIndex(chat => chat.receiver_username === newChat.receiver_username);
+
     const newChats = [
       {
         ...previousChats[receiverIndex],
@@ -45,13 +47,19 @@ const Chat = ({ chats, user, pagination }) => {
     return newChats;
   };
 
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
+
   // Get user from URL
   useEffect(() => {
-    if (activeUserId == 0) {
+    if (activeUserUsername == "") {
       return;
     }
 
-    if (activeUserId == user.id) {
+    if (activeUserUsername == currentUser?.username) {
       window.location.replace("/messages");
     }
 
@@ -59,7 +67,7 @@ const Chat = ({ chats, user, pagination }) => {
     setMessage("");
     setMessages([]);
 
-    get(`messages/${activeUserId}`).then(response => {
+    get(`messages/${activeUserUsername}`).then(response => {
       setMessages(response.messages);
       setLastMessageId(response.messages[response.messages.length - 1]?.id);
       setChatId(response.chat_id || "");
@@ -68,7 +76,7 @@ const Chat = ({ chats, user, pagination }) => {
       setLastOnline(response.lastOnline);
       setGettingMessages(false);
     });
-  }, [activeUserId]);
+  }, [activeUserUsername]);
 
   useEffect(() => {
     if (perkId <= 0) {
@@ -113,7 +121,7 @@ const Chat = ({ chats, user, pagination }) => {
 
     setSendingMessage(true);
 
-    post("/messages", { id: activeUserId, message }).then(response => {
+    post("/messages", { id: activeUserUsername, message }).then(response => {
       if (response.error) {
         console.log(response.error);
         // setError("Unable to send message, try again") // @TODO: Create error box (absolute positioned)
@@ -135,45 +143,40 @@ const Chat = ({ chats, user, pagination }) => {
   };
 
   const clearActiveUser = () => {
-    setActiveUserId(0);
+    setActiveUserUsername("");
     setMessages([]);
     setMessage("");
   };
 
-  const setActiveUser = userId => {
-    setActiveUserId(userId);
-    window.history.pushState({}, document.title, `/messages?user=${userId}`);
+  const setActiveUser = userUsername => {
+    setActiveUserUsername(userUsername);
+    window.history.pushState({}, document.title, `/messages?user=${userUsername}`);
   };
 
   window.addEventListener("popstate", () => {
     const params = new URLSearchParams(document.location.search);
-    setActiveUserId(params.get("user"));
+    setActiveUserUsername(params.get("user"));
   });
 
   useEffect(() => {
-    const currentUserId = localChats.findIndex(chat => chat.receiver_id === activeUserId);
+    const activeChatIndex = localChats.findIndex(chat => chat.receiver_username === activeUserUsername);
 
-    if (currentUserId > 0 && localChats.length > 0 && localChats[currentUserId].unreadMessagesCount > 0) {
+    if (activeChatIndex > 0 && localChats.length > 0 && localChats[activeChatIndex].unreadMessagesCount > 0) {
       const newChats = [
-        ...localChats.slice(0, currentUserId),
+        ...localChats.slice(0, activeChatIndex),
         {
-          ...localChats[currentUserId],
+          ...localChats[activeChatIndex],
           unreadMessagesCount: 0
         },
-        ...localChats.slice(currentUserId + 1)
+        ...localChats.slice(activeChatIndex + 1)
       ];
       setLocalChats(newChats);
     }
-  }, [activeUserId]);
+  }, [activeUserUsername]);
 
   const messagingDisabled = () => {
-    const activeUser = chats.find(chat => chat.receiver_id == activeUserId);
-    return user.messagingDisabled || (activeUser && activeUser.messagingDisabled);
-  };
-
-  const activeUserWithTalent = () => {
-    const activeUser = chats.find(chat => chat.receiver_id == activeUserId);
-    return activeUser && activeUser.receiver_with_talent;
+    const activeUser = chats.find(chat => chat.receiver_username == activeUserUsername);
+    return currentUser?.messaging_disabled || (activeUser && activeUser.messagingDisabled);
   };
 
   const loadMoreChats = () => {
@@ -204,17 +207,16 @@ const Chat = ({ chats, user, pagination }) => {
     <>
       <div className="d-flex flex-column w-100 h-100 themed-border-top">
         <main className="d-flex flex-row h-100 themed-border-left chat-container">
-          {(!mobile || activeUserId == 0) && (
+          {(!mobile || activeUserUsername == 0) && (
             <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right chat-section">
               <MessageUserList
-                onClick={userId => setActiveUser(userId)}
-                activeUserId={activeUserId}
+                onClick={userName => setActiveUser(userName)}
+                activeUserUsername={activeUserUsername}
                 chats={localChats}
                 setChats={setLocalChats}
                 mode={theme.mode()}
                 mobile={mobile}
-                messengerWithTalent={user.withTalent}
-                supportersCount={user.supportersCount}
+                supportersCount={currentUser?.supporters_count}
                 showLoadMoreChats={showLoadMoreChats()}
                 loadMoreChats={loadMoreChats}
                 searchChats={debouncedSearchChats}
@@ -222,24 +224,23 @@ const Chat = ({ chats, user, pagination }) => {
               />
             </section>
           )}
-          {(!mobile || activeUserId > 0) && !gettingMessages && (
+          {(!mobile || activeUserUsername > 0) && !gettingMessages && (
             <section className="col-lg-8 px-0 lg-overflow-y-hidden themed-border-right chat-section">
               <MessageExchange
                 smallScreen={mobile}
-                activeUserId={activeUserId}
-                clearActiveUserId={() => clearActiveUser()}
+                activeUserUsername={activeUserUsername}
+                clearActiveUserUsername={() => clearActiveUser()}
                 value={message}
                 onChange={setMessage}
                 onSubmit={ignoreAndCallDebounce}
                 messages={messages}
                 sendingMessage={sendingMessage}
                 messagingDisabled={messagingDisabled()}
-                user={user}
+                user={currentUser}
                 profilePictureUrl={messengerProfilePicture}
                 username={messengerUsername}
                 lastOnline={lastOnline}
-                messengerWithTalent={activeUserWithTalent()}
-                supportersCount={user.supportersCount}
+                supportersCount={currentUser?.supporters_count}
                 mode={theme.mode()}
               />
             </section>

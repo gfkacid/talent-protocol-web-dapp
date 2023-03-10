@@ -12,6 +12,8 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import { post } from "src/utils/requests";
 
+import { loggedInUserStore } from "src/contexts/state";
+
 import RewardsModal from "./components/RewardsModal";
 import Supporting from "./components/Supporting";
 import Supporters from "./components/Supporters";
@@ -74,7 +76,7 @@ const ConnectWallet = ({ userId, onConnect, railsContext }) => {
     <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center p-4 p-lg-0">
       <H5 className="mb-2" text="Please connect your wallet" bold />
       <P2 className="mb-4" text="To see your portfolio you need to connect your wallet." bold />
-      <Web3ModalConnect user_id={userId} onConnect={onConnect} railsContext={railsContext} />
+      <Web3ModalConnect userId={userId} onConnect={onConnect} railsContext={railsContext} />
     </div>
   );
 };
@@ -100,12 +102,9 @@ const newTransak = (width, height, env, apiKey) => {
 const NewPortfolio = ({
   tokenAddress,
   ticker,
-  currentUserId,
-  messagingDisabled,
   userNFT,
   memberNFT,
   railsContext,
-  isCurrentUserImpersonated,
   chainAPI,
   stableBalance,
   wrongChain,
@@ -147,6 +146,14 @@ const NewPortfolio = ({
 
   // --- TRANSAK ---
   const [transakDone, setTransakDone] = useState(false);
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   const onClickTransak = e => {
     e.preventDefault();
@@ -296,7 +303,7 @@ const NewPortfolio = ({
   };
 
   const onClaim = contract_id => {
-    if (contract_id && !isCurrentUserImpersonated) {
+    if (contract_id && !currentUser?.impersonated) {
       setActiveContract(contract_id);
       setShow(true);
     }
@@ -333,7 +340,7 @@ const NewPortfolio = ({
   }
 
   if (!walletConnected) {
-    return <ConnectWallet userId={currentUserId} onConnect={onWalletConnect} railsContext={railsContext} />;
+    return <ConnectWallet userId={currentUser?.id} onConnect={onWalletConnect} railsContext={railsContext} />;
   }
 
   if (wrongChain) {
@@ -488,7 +495,7 @@ const NewPortfolio = ({
           talents={supportedTalents}
           returnValues={returnValues}
           onClaim={onClaim}
-          isCurrentUserImpersonated={isCurrentUserImpersonated}
+          isCurrentUserImpersonated={currentUser?.impersonated}
           loading={loading}
         />
       )}
@@ -499,8 +506,8 @@ const NewPortfolio = ({
           ticker={ticker}
           onClaim={onClaim}
           chainAPI={chainAPI}
-          currentUserId={currentUserId}
-          messagingDisabled={messagingDisabled}
+          currentUserId={currentUser?.id}
+          messagingDisabled={currentUser?.messaging_disabled}
         />
       )}
       {activeTab == "NFTs" && (

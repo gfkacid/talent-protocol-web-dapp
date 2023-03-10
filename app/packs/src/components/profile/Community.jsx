@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 
 import { get } from "src/utils/requests";
 import { ethers } from "ethers";

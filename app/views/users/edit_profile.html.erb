@@ -1,29 +1,7 @@
 <main class="main-content">
   <div class="container-grid">
-    <%= react_component("EditTalent", props:
+    <%= react_component("UserSettings", props:
       {
-        talent: @talent.as_json,
-        profilePictureUrl: @talent.profile_picture_url,
-        bannerUrl: @talent.banner_url,
-        tags: current_user.tags.where(hidden: false).map(&:description),
-        token: @talent.talent_token.as_json,
-        perks: @talent.perks.as_json,
-        career_goal: @talent.career_goal.as_json,
-        goals: @talent.career_goal.present? ? @talent.career_goal&.goals.order(:due_date) : [],
-        milestones: @talent.milestones.as_json,
-        current_user_id: current_acting_user.id,
-        token_live: @talent.talent_token.deployed?,
-        user: { 
-          id: current_acting_user.id,
-          email: current_acting_user.email,
-          username: current_acting_user.username,
-          display_name: current_acting_user.display_name,
-          messaging_disabled: current_acting_user.messaging_disabled,
-          wallet_id: current_acting_user.wallet_id,
-          profile_type: current_acting_user.profile_type,
-          tal_domain: current_acting_user.tal_domain&.domain,
-          tal_domain_theme: current_acting_user.tal_domain&.theme,
-        },
         notificationPreferences: User::Delivery::TYPES.map do |type|
           [type, @talent.user.notification_preferences[type].presence || User::Delivery::IMMEDIATE]
         end.to_h

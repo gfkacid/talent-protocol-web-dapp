@@ -65,7 +65,7 @@ class API::V1::TalentController < ApplicationController
   def talent
     @talent ||=
       if talent_id_param
-        Talent.find(params[:id])
+        Talent.joins(:user).find_by!("talent.id::text = :id OR users.id::text = :id OR users.uuid::text = :id", id: params[:id])
       else
         Talent.find_by!(public_key: params[:talent_id])
       end

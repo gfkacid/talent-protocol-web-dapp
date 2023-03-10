@@ -30,42 +30,72 @@ const SocialRow = ({ profile, className }) => {
     <div className={cx("d-flex flex-row flex-wrap text-primary-03", className ? className : "mt-3 mt-lg-0")}>
       {profile.website && (
         <a className="button-link" href={profile.website} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faGlobeEurope} />
           </Button>
         </a>
       )}
       {profile.github && (
         <a className="button-link" href={profile.github} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faGithub} />
           </Button>
         </a>
       )}
       {profile.linkedin && (
         <a className="button-link" href={profile.linkedin} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faLinkedin} />
           </Button>
         </a>
       )}
       {profile.twitter && (
         <a className="button-link" href={profile.twitter} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faTwitter} />
           </Button>
         </a>
       )}
       {profile.telegram && (
         <a className="button-link" href={telegramLink()} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faTelegram} />
           </Button>
         </a>
       )}
       {profile.discord && (
         <a className="button-link" href={discordLink()} target="self">
-          <Button type="white-outline" size="icon" className="d-flex justify-content-center align-items-center mr-2">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
             <FontAwesomeIcon icon={faDiscord} />
           </Button>
         </a>

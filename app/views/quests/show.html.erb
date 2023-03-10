@@ -3,8 +3,7 @@
     <div class="secondary-content">
       <%= react_component("QuestShow",
         props: {
-          quest: @quest,
-          user: { id: current_user.id, username: current_user.username, profile_type: current_user.profile_type, talent_id: current_user.talent.id }
+          quest: @quest
         },
         prerender: false) %>
     </div>

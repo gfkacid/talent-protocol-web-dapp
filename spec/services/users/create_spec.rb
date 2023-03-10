@@ -11,7 +11,13 @@ RSpec.describe Users::Create do
       password: password,
       username: username,
       invite_code: invite_code,
-      wallet_id: wallet_id
+      wallet_id: wallet_id,
+      gender: gender,
+      nationality: nationality,
+      location: location,
+      headline: headline,
+      career_needs: ["Mentoring others"],
+      tags: ["Web3"]
     }
   }
 
@@ -20,6 +26,10 @@ RSpec.describe Users::Create do
   let(:username) { "test" }
   let(:wallet_id) { SecureRandom.hex }
   let(:invite_code) { invite.code }
+  let(:gender) { "Male" }
+  let(:nationality) { "Portuguese" }
+  let(:location) { "Baguim do Monte, Portugal" }
+  let(:headline) { "Some random headline" }
 
   let(:user) { create :user, username: "jack" }
   let!(:invite) { create :invite, user: user }
@@ -35,6 +45,7 @@ RSpec.describe Users::Create do
     it "creates a new user" do
       result = create_user
       user = result[:user]
+      talent_profile_data = JSON.parse(user.talent.profile.to_json)
 
       expect(result[:success]).to be(true)
       expect(user).to be_persisted
@@ -45,6 +56,10 @@ RSpec.describe Users::Create do
       expect(user.role).to eq("basic")
       expect(user.theme_preference).to eq("light")
       expect(user.username).to eq(username)
+      expect(talent_profile_data["gender"]).to eq(gender)
+      expect(talent_profile_data["location"]).to eq(location)
+      expect(talent_profile_data["nationality"]).to eq(nationality)
+      expect(talent_profile_data["headline"]).to eq(headline)
     end
 
     context "when a display name is provided" do

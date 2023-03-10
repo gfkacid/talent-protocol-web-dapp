@@ -14,5 +14,22 @@ RSpec.describe Tasks::Update do
 
       expect(user.talent.public).to eq true
     end
+
+    it "creates a new notification" do
+      update_task.call(type: task.type, user: user)
+
+      created_notification = Notification.last
+
+      aggregate_failures do
+        expect(created_notification.type).to eq "Quests::CompletedTalentProfileNotification"
+        expect(created_notification.params).to eq(
+          {
+            "type" => quest.short_type,
+            "model_id" => quest.id,
+            "source_id" => user.id
+          }
+        )
+      end
+    end
   end
 end

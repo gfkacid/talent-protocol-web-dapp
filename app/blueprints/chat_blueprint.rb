@@ -13,7 +13,7 @@ class ChatBlueprint < Blueprinter::Base
     end
 
     field :receiver_id do |chat, options|
-      chat.receiver_of(options[:current_user]).id
+      chat.receiver_of(options[:current_user]).uuid
     end
 
     field :receiver_username do |chat, options|

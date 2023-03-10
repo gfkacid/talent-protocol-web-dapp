@@ -45,7 +45,7 @@ const MobileSupporterAction = ({
           <Button onClick={hide} type="white-ghost" mode={mode} className="mx-3 p-2">
             <ArrowLeft color="currentColor" />
           </Button>
-          <TalentProfilePicture src={profilePicture} height="24" userId={userId} />
+          <TalentProfilePicture src={profilePicture} height="24" />
           <P2 className="ml-2 p-0" bold>
             {name}
           </P2>
@@ -265,7 +265,7 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
       return;
     }
 
-    get(`/api/v1/supporters/${concatenateSupporterAddresses(newSupporters)}`).then(response => {
+    get(`/api/v1/portfolio_supporters/${concatenateSupporterAddresses(newSupporters)}`).then(response => {
       if (response.supporters.length > 0) {
         const supportersTransformed = arrayToObject(response.supporters, "wallet_id");
 
@@ -431,14 +431,14 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
             show={true}
             hide={() => setActiveSupporter(null)}
             mode={mode}
-            profilePicture={supporterInfo[activeSupporter.id]?.profilePictureUrl}
+            profilePicture={supporterInfo[activeSupporter.id]?.profile_picture_url}
             name={supporterName(activeSupporter)}
             tokensHeld={parseAndCommify(activeSupporter.amount)}
             unclaimedRewards={parseAndCommify(returnValues[activeSupporter.id] || "0")}
             ticker={ticker}
             userId={supporterInfo[activeSupporter.id]?.id}
             currentUserId={currentUserId}
-            messagingDisabled={supporterInfo[activeSupporter.id]?.messagingDisabled || messagingDisabled}
+            messagingDisabled={supporterInfo[activeSupporter.id]?.messaging_disabled || messagingDisabled}
           />
         )}
         <MobileSupportersDropdown
@@ -478,7 +478,7 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
                 <Table.Td>
                   <div className="d-flex cursor-pointer pl-4 py-2">
                     <TalentProfilePicture
-                      src={supporterInfo[supporter.id]?.profilePictureUrl}
+                      src={supporterInfo[supporter.id]?.profile_picture_url}
                       height="24"
                       userId={supporter.id}
                     />
@@ -543,11 +543,7 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
             <Table.Tr key={`supporter-${supporter.id}`} className="reset-cursor">
               <Table.Td>
                 <div className="d-flex flex-row">
-                  <TalentProfilePicture
-                    src={supporterInfo[supporter.id]?.profilePictureUrl}
-                    height="24"
-                    userId={supporter.id}
-                  />
+                  <TalentProfilePicture src={supporterInfo[supporter.id]?.profile_picture_url} height="24" />
                   {supporterInfo[supporter.id]?.username && (
                     <P2 text={`${supporterInfo[supporter.id]?.username}`} bold className="ml-2" />
                   )}
@@ -577,10 +573,10 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
                   disabled={
                     !supporterInfo[supporter.id]?.id ||
                     supporterInfo[supporter.id]?.id == currentUserId ||
-                    supporterInfo[supporter.id]?.messagingDisabled ||
+                    supporterInfo[supporter.id]?.messaging_disabled ||
                     messagingDisabled
                   }
-                  href={`/messages?user=${supporterInfo[supporter.id]?.id}`}
+                  href={`/messages?user=${supporterInfo[supporter.id]?.username}`}
                 />
               </Table.Td>
             </Table.Tr>

@@ -4,7 +4,7 @@ import { CheckBold } from "src/components/icons";
 import { lightPrimary, darkPrimary, darkPositive } from "src/utils/colors.js";
 import ThemeContainer, { useTheme } from "src/contexts/ThemeContext";
 
-const ProgressCircle = ({ id, width, progress, completedTasks, allTasks, done = false }) => {
+const ProgressCircle = ({ type, width, progress, completedTasks, allTasks, done = false }) => {
   const { mode } = useTheme();
 
   const setProgress = (circle, progress) => {
@@ -16,13 +16,13 @@ const ProgressCircle = ({ id, width, progress, completedTasks, allTasks, done = 
   };
 
   useEffect(() => {
-    if (document.getElementById(`circle-${id}`)?.querySelector(".progress-ring")) {
-      setProgress(document.getElementById(`circle-${id}`).querySelector(".progress-ring"), progress);
+    if (document.getElementById(`circle-${type}`)?.querySelector(".progress-ring")) {
+      setProgress(document.getElementById(`circle-${type}`).querySelector(".progress-ring"), progress);
     }
-  }, [document.getElementById(`circle-${id}`)?.querySelector(".progress-ring")]);
+  }, [document.getElementById(`circle-${type}`)?.querySelector(".progress-ring")]);
 
   return (
-    <div className="whole-ring" id={`circle-${id}`}>
+    <div className="whole-ring" id={`circle-${type}`}>
       {done ? (
         <CheckBold className="position-absolute" color={darkPositive} size={21} />
       ) : (

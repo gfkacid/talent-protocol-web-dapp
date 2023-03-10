@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+const LEGACY_BREAKPOINT = 992;
+const NEW_BREAKPOINT = 1240;
+
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
   return {
@@ -8,10 +11,10 @@ const getWindowDimensions = () => {
   };
 };
 
-const useWindowDimensionsHook = () => {
+const useWindowDimensionsHook = (isLegacy = true) => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
-  const mobile = windowDimensions.width < 992;
+  const mobile = windowDimensions.width < (isLegacy ? LEGACY_BREAKPOINT : NEW_BREAKPOINT);
 
   useEffect(() => {
     function handleResize() {

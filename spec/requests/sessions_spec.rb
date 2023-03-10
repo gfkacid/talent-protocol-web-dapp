@@ -8,7 +8,7 @@ RSpec.describe "Sessions", type: :request do
       it "renders the login template" do
         root_request
 
-        expect(response).to render_template("sessions/new")
+        expect(response).to render_template("onboard/sign_in")
       end
     end
 

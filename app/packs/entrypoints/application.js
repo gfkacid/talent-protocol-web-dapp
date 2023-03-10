@@ -26,7 +26,7 @@ import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
 import BottomNav from "src/components/design_system/bottom_nav";
 import TopBar from "src/components/top_bar";
-import EditTalent from "src/components/talent/Edit/Profile";
+import UserSettings from "src/components/talent/Edit/Settings";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
 import Discovery from "src/components/discovery";
 import DiscoveryShow from "src/components/discovery/show";
@@ -42,6 +42,8 @@ import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
 import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
+import { SignInPage } from "src/components-v2/pages/sign-in";
+import { SignUpPage } from "src/components-v2/pages/sign-up";
 
 import "stylesheets/application.scss";
 
@@ -54,7 +56,7 @@ ReactOnRails.register({
   Chat,
   Discovery,
   DiscoveryShow,
-  EditTalent,
+  UserSettings,
   FirstQuestPopup,
   FlashMessages,
   Footer,
@@ -76,7 +78,9 @@ ReactOnRails.register({
   Web3ModalConnect,
   OnboardingFlow,
   Support,
-  UserSupportPage
+  UserSupportPage,
+  SignInPage,
+  SignUpPage
 });
 
 Rails.start();

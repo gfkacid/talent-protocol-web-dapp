@@ -1,12 +1,12 @@
-<main class="h-100">
-  <%= react_component("RegistrationFlow",
+<%= react_component("SignUpPage",
     props: {
+      linkedinClientId: ENV["LINKEDIN_CLIENT_ID"],
+      linkedinRedirectUri: ENV["LINKEDIN_REDIRECT_URI"],
       step: 1,
       captchaKey: ENV["RECAPTCHA_SITE_KEY"],
       inviteCode: @invite&.code,
       profilePictureUrl: @invite&.profile_picture_url,
       name: @invite&.name
     },
-    prerender: false, html_options: { class: "h-100"})
-  %>
-</main>
+    prerender: false
+) %>

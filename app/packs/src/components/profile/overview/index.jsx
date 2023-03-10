@@ -464,7 +464,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -648,7 +648,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -701,7 +701,7 @@ const Overview = ({
         tokenAddress={talent.talentToken.contractId}
         tokenId={talent.talentToken.id}
         userId={currentUserId}
-        talentUserId={talent.userId}
+        userUsername={talent.user.username}
         tokenChainId={talent.talentToken.chainId}
         talentName={talent.user.displayName || talent.user.username}
         ticker={talent.talentToken.ticker}
@@ -729,6 +729,7 @@ const Overview = ({
         hide={() => setShowApprovalConfirmationModal(false)}
         talent={talent}
         setTalent={setTalent}
+        railsContext={railsContext}
       />
       <RejectTalentModal
         show={showRejectModal}

@@ -9,7 +9,7 @@ import ApplyToLaunchTokenModal from "src/components/design_system/modals/ApplyTo
 
 import cx from "classnames";
 
-const TaskCard = ({ title, type, link, status, userId, user }) => {
+const TaskCard = ({ title, type, link, status, userId, userUsername, userProfileType }) => {
   const railsContext = railsContextStore(state => state.railsContext);
 
   const completed = status === "done";
@@ -52,7 +52,7 @@ const TaskCard = ({ title, type, link, status, userId, user }) => {
     if (title === "Connect wallet" && status !== "done") {
       return (
         <Web3ModalConnect
-          user_id={userId}
+          userId={userId}
           onConnect={() => window.location.reload()}
           railsContext={railsContext}
           buttonClassName={`w-100 extra-big-size-button ${buttonType}-button`}
@@ -62,7 +62,7 @@ const TaskCard = ({ title, type, link, status, userId, user }) => {
       return (
         <Button
           className="w-100"
-          disabled={user.profile_type == "waiting_for_approval"}
+          disabled={userProfileType == "waiting_for_approval"}
           size="extra-big"
           type={buttonType}
           text={buttonText}
@@ -110,9 +110,8 @@ const TaskCard = ({ title, type, link, status, userId, user }) => {
       <ApplyToLaunchTokenModal
         show={showApplyToLaunchTokenModal}
         hide={() => setShowApplyToLaunchTokenModal(false)}
-        userId={user.id}
-        talentId={user.talent_id}
-        username={user.username}
+        userId={userId}
+        username={userUsername}
       />
     </div>
   );

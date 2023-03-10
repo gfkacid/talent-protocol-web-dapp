@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { loggedInUserStore } from "src/contexts/state";
 
 import { urlStore } from "src/contexts/state";
 import { get } from "src/utils/requests";
@@ -29,7 +30,6 @@ const Tabs = ({ changeTab, activeTab }) => {
 };
 
 const Rewards = ({
-  user,
   allRaces,
   userRewards,
   raceRewards,
@@ -43,13 +43,20 @@ const Rewards = ({
 }) => {
   const changeURL = urlStore(state => state.changeURL);
 
-  const { isEligible } = user;
   const url = new URL(window.location);
   const searchParams = new URLSearchParams(url.search);
   const [activeTab, setTab] = useState("quests");
   const [questId, setQuestId] = useState(null);
   const [localInvitedUsers, setLocalInvitedUsers] = useState(invitedUsers);
   const [localPagination, setLocalPagination] = useState(pagination);
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   const changeTab = tab => {
     window.history.pushState({}, document.title, `${url.pathname}?tab=${tab}`);
@@ -93,9 +100,9 @@ const Rewards = ({
         <ReferralRace
           allRaces={allRaces}
           raceRewards={raceRewards}
-          isEligible={isEligible}
+          beginnerQuestCompleted={currentUser?.beginner_quest_completed}
           race={race}
-          user={user}
+          username={currentUser?.username}
           leaderboardResults={leaderboardResults}
           invitedUsers={localInvitedUsers}
           loadMoreInvitedUsers={loadMoreInvitedUsers}
@@ -108,8 +115,8 @@ const Rewards = ({
           quests={quests}
           questId={questId}
           setQuestId={setQuestId}
-          userId={user.id}
-          username={user.username}
+          userId={currentUser?.id}
+          username={currentUser?.username}
           withPersonaRequest={withPersonaRequest}
         />
       )}

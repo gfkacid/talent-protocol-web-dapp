@@ -58,7 +58,7 @@ const SendMessage = ({ mode, setMessage, amountBought, ticker, talentName, hide,
   </>
 );
 
-const SendMessageModal = ({ show, setShow, amountBought, ticker, talentName, talentId, mode }) => {
+const SendMessageModal = ({ show, setShow, amountBought, ticker, talentName, userUsername, mode }) => {
   const [message, setMessage] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
@@ -70,7 +70,7 @@ const SendMessageModal = ({ show, setShow, amountBought, ticker, talentName, tal
 
     setSendingMessage(true);
 
-    post("/messages", { id: talentId, message }).then(response => {
+    post("/messages", { id: userUsername, message }).then(response => {
       if (response.error) {
         console.log(response.error);
         // setError("Unable to send message, try again") // @TODO: Create error box (absolute positioned)
@@ -87,7 +87,7 @@ const SendMessageModal = ({ show, setShow, amountBought, ticker, talentName, tal
 
   const redirectToMessages = () => {
     hide();
-    window.location.href = `/messages?user=${talentId}`;
+    window.location.href = `/messages?user=${userUsername}`;
   };
 
   const getCurrentModal = () => {

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { camelCaseObject } from "src/utils/transformObjects";
 import cx from "classnames";
 import React, { useState, useContext, useEffect } from "react";
+import { loggedInUserStore } from "src/contexts/state";
 
 import { ArrowLeft, Help, Spinner } from "src/components/icons";
 
@@ -29,7 +30,7 @@ import TalentTableListMode from "src/components/talent/TalentTableListMode";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import Tooltip from "src/components/design_system/tooltip";
 
-const DiscoveryShow = ({ isAdminOrModerator, discoveryRow, env }) => {
+const DiscoveryShow = ({ discoveryRow, env }) => {
   const theme = useContext(ThemeContext);
   const { mobile } = useWindowDimensionsHook();
   const url = new URL(document.location);
@@ -53,6 +54,15 @@ const DiscoveryShow = ({ isAdminOrModerator, discoveryRow, env }) => {
     const formattedNumber = ethers.utils.formatUnits(bignumber);
     return parseAndCommify(formattedNumber);
   };
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const isAdminOrModerator = currentUser?.admin || currentUser?.moderator;
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(document.location.search);

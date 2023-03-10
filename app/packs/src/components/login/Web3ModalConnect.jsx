@@ -51,7 +51,7 @@ export const UnableToConnect = ({ show, hide }) => (
   </Modal>
 );
 
-const Web3ModalConnect = ({ user_id, onConnect, railsContext, mode, buttonClassName }) => {
+const Web3ModalConnect = ({ userId, onConnect, railsContext, mode, buttonClassName }) => {
   const [requestingWalletConnection, setRequestingWalletConnection] = useState(false);
   const [account, setAccount] = useState("");
   const [showWalletConnectionError, setShowWalletConnectionError] = useState(false);
@@ -64,7 +64,7 @@ const Web3ModalConnect = ({ user_id, onConnect, railsContext, mode, buttonClassN
     const _account = await api.retrieveAccount();
 
     if (_account) {
-      const result = await patch(`/api/v1/users/${user_id}`, {
+      const result = await patch(`/api/v1/users/${userId}`, {
         wallet_id: _account.toLowerCase()
       }).catch(error => {
         console.log(error);

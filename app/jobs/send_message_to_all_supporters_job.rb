@@ -17,7 +17,7 @@ class SendMessageToAllSupportersJob < ApplicationJob
         sent_to_supporters: true
       )
 
-      store last_receiver_id: created_message.receiver_id
+      store last_receiver_username: created_message.receiver.username
       at index + 1
     end
   end

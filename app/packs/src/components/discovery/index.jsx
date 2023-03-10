@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useWindowDimensionsHook } from "src/utils/window";
+
+import { loggedInUserStore } from "src/contexts/state";
 
 import HighlightsCard from "src/components/design_system/highlights_card";
 import DiscoveryBanners from "src/components/design_system/banners/DiscoveryBanners";
@@ -9,17 +11,20 @@ import DiscoveryRow from "./discovery_row";
 
 import cx from "classnames";
 
-const Discovery = ({
-  discoveryRows,
-  /*marketingArticles,*/
-  user,
-  railsContext
-}) => {
+const Discovery = ({ discoveryRows, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   return (
     <div className="d-flex flex-column">
-      {!mobile && <DiscoveryBanners user={user} />}
+      {!mobile && <DiscoveryBanners user={currentUser} />}
       <div
         className={cx(
           "w-100 d-flex flex-wrap mt-6 mb-6",

@@ -75,7 +75,7 @@ class API::V1::UsersController < ApplicationController
   private
 
   def user
-    @user ||= User.find_by(id: params[:id])
+    @user ||= User.find_by("id::text = :id OR uuid::text = :id", id: params[:id])
   end
 
   def search_params

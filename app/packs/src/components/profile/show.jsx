@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Divider from "src/components/design_system/other/Divider";
+import { loggedInUserStore } from "src/contexts/state";
 
 import ThemeContainer from "src/contexts/ThemeContext";
 import { camelCaseObject } from "src/utils/transformObjects";
@@ -19,16 +20,7 @@ import ApplyToLaunchToken from "./ApplyToLaunchToken";
 import Perks from "./Perks";
 import SocialGraph from "./social_graph/SocialGraph";
 
-const Show = ({
-  talent,
-  railsContext,
-  currentUserId,
-  currentUserAdmin,
-  currentUserModerator,
-  isCurrentUserImpersonated,
-  withPersonaRequest,
-  profileSubdomain
-}) => {
+const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
   const talentToken = localTalent.talentToken;
@@ -36,9 +28,17 @@ const Show = ({
   const [showLastDivider, setShowLastDivider] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const talentTokenPrice = 0.1;
-  const canUpdate = talent.user.id == currentUserId && !previewMode;
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const canUpdate = talent.user.uuid == currentUser?.id && !previewMode;
 
   const { mobile } = useWindowDimensionsHook();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   const changeSection = newSection => {
     setSelectedSection(newSection);
@@ -92,16 +92,16 @@ const Show = ({
         className="mb-2"
         talent={localTalent}
         setTalent={setLocalTalent}
-        currentUserId={currentUserId}
-        currentUserAdmin={currentUserAdmin}
-        currentUserModerator={currentUserModerator}
+        currentUserId={currentUser?.id}
+        currentUserAdmin={currentUser?.admin}
+        currentUserModerator={currentUser?.moderator}
         railsContext={railsContext}
         changeSection={changeSection}
         talentTokenPrice={talentTokenPrice}
         canUpdate={canUpdate}
         previewMode={previewMode}
         setPreviewMode={setPreviewMode}
-        isCurrentUserImpersonated={isCurrentUserImpersonated}
+        isCurrentUserImpersonated={currentUser?.impersonated}
         withPersonaRequest={withPersonaRequest}
         profileSubdomain={profileSubdomain}
       />
@@ -157,11 +157,13 @@ const Show = ({
       <div className="my-7 w-100 col-12" id="#community">
         <Community userId={localTalent.user.uuid} talent={localTalent} canUpdate={canUpdate} />
       </div>
-      <div className="my-7 w-100 col-12" id="#social-graph">
-        <div className="social-graph">
-          <SocialGraph talent={localTalent} />
+      {currentUser?.admin && (
+        <div className="my-7 w-100 col-12" id="#social-graph">
+          <div className="social-graph">
+            <SocialGraph talent={localTalent} />
+          </div>
         </div>
-      </div>
+      )}
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps

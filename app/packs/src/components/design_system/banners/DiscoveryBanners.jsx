@@ -4,7 +4,7 @@ import Button from "src/components/design_system/button";
 import ApplyToLaunchTokenModal from "src/components/design_system/modals/ApplyToLaunchTokenModal";
 import { TALENT_PROTOCOL_DISCORD } from "src/utils/constants";
 
-const TalentTokenApplicationBanner = ({ user }) => {
+const TalentTokenApplicationBanner = ({ userId, userUsername }) => {
   const [showApplyToLaunchTokenModal, setShowApplyToLaunchTokenModal] = useState(false);
 
   return (
@@ -27,58 +27,27 @@ const TalentTokenApplicationBanner = ({ user }) => {
       <ApplyToLaunchTokenModal
         show={showApplyToLaunchTokenModal}
         hide={() => setShowApplyToLaunchTokenModal(false)}
-        userId={user.id}
-        talentId={user.talent_id}
-        username={user.username}
+        userId={userId}
+        username={userUsername}
       />
     </>
   );
 };
 
-const ConnectWalletBanner = ({ beginnerQuestId }) => (
+const ConnectWalletBanner = () => (
   <div className="talent-background connect-wallet-banner-background">
     <div className="talent-background-text permanent-text-white">
       <div className="col-1"></div>
       <div style={{ width: "450px" }}>
         <Caption className="mb-2 text-yellow" text="WELCOME TO TALENT PROTOCOL" bold />
         <H3 className="pb-4" text="Connect a wallet to unlock your first community NFT." bold />
-        <a className="button-link" href={`/quests/${beginnerQuestId}`}>
+        <a className="button-link" href={"/quests/user"}>
           <Button type="primary-default" size="extra-big" onClick={() => null} text="Connect Wallet" />
         </a>
       </div>
     </div>
   </div>
 );
-
-/*
-const BrowseTalentBanner = ({ supporterQuestId }) => (
-  <div className="talent-background browse-talent-banner-background">
-    <div className="talent-background-text permanent-text-white">
-      <div className="col-1"></div>
-      <div style={{ width: "450px" }}>
-        <Caption
-          className="mb-2 text-primary"
-          text="SUCCESS IS COLLECTIVE"
-          bold
-        />
-        <H3
-          className="pb-4 permanent-text-black"
-          text="Start supporting high-potential talent today."
-          bold
-        />
-        <a className="button-link" href={`/quests/${supporterQuestId}`}>
-          <Button
-            type="primary-default"
-            size="extra-big"
-            onClick={() => null}
-            text="Browse Talent"
-          />
-        </a>
-      </div>
-    </div>
-  </div>
-);
-*/
 
 const JoinCommunityBanner = () => (
   <div className="talent-background join-community-banner-background">
@@ -153,18 +122,18 @@ const VerifiyUserBanner = ({ username }) => (
 
 const DiscoveryBanners = ({ user }) => {
   const currentBanner = () => {
-    if (!user.walletId) {
-      return <ConnectWalletBanner beginnerQuestId={user.beginnerQuestId} />;
+    if (!user?.wallet_address) {
+      return <ConnectWalletBanner />;
     } else if (!user.verified) {
-      return <VerifiyUserBanner username={user.username} />;
-    } else if (user.profileType === "approved") {
-      return <LaunchMyTokenBanner username={user.username} />;
-    } else if (user.profileType == "talent" && user.tokenLaunched) {
+      return <VerifiyUserBanner username={user?.username} />;
+    } else if (user?.profile_type === "approved") {
+      return <LaunchMyTokenBanner username={user?.username} />;
+    } else if (user.profile_type == "talent" && user?.token_launched) {
       return <InviteTalentBanner />;
-    } else if (user.activeSupporter) {
+    } else if (user.active_supporter) {
       return <JoinCommunityBanner />;
-    } else if (user.walletId) {
-      return <TalentTokenApplicationBanner user={user} />;
+    } else if (user.wallet_address) {
+      return <TalentTokenApplicationBanner userId={user?.id} userUsername={user?.username} />;
     }
   };
 

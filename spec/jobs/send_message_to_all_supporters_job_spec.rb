@@ -11,7 +11,7 @@ RSpec.describe SendMessageToAllSupportersJob, type: :job do
 
   let(:send_message_class) { Messages::Send }
   let(:send_message_instance) { instance_double(send_message_class, call: created_message) }
-  let(:created_message) { build :message }
+  let(:created_message) { build :message, receiver: build(:user) }
 
   let(:investor_user_one) { create :user }
   let(:investor_user_two) { create :user }

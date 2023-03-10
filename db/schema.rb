@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_28_165541) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -144,8 +144,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_165541) do
     t.bigint "connected_user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["connected_user_id"], name: "index_connections_on_connected_user_id"
+    t.index ["connection_type"], name: "index_connections_on_connection_type"
+    t.index ["created_at"], name: "index_connections_on_created_at"
     t.index ["user_id", "connected_user_id"], name: "index_connections_on_user_id_and_connected_user_id", unique: true
     t.index ["user_id"], name: "index_connections_on_user_id"
+    t.index ["uuid"], name: "index_connections_on_uuid", unique: true
     t.check_constraint "user_id <> connected_user_id", name: "user_connections_constraint"
   end
 
@@ -544,14 +547,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_165541) do
   end
 
   create_table "user_tags", force: :cascade do |t|
-    t.bigint "talent_id"
     t.bigint "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["tag_id"], name: "index_user_tags_on_tag_id"
-    t.index ["talent_id", "tag_id"], name: "index_user_tags_on_talent_id_and_tag_id", unique: true
-    t.index ["talent_id"], name: "index_user_tags_on_talent_id"
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
@@ -603,12 +603,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_165541) do
     t.boolean "whitelisted_talent_mate", default: false
     t.datetime "onboarded_at"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
     t.index ["race_id"], name: "index_users_on_race_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
     t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["uuid"], name: "index_users_on_uuid", unique: true
     t.index ["wallet_id"], name: "index_users_on_wallet_id", unique: true
   end
 
@@ -678,6 +680,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_165541) do
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
   add_foreign_key "user_tags", "tags"
-  add_foreign_key "user_tags", "talent"
   add_foreign_key "user_tags", "users"
 end

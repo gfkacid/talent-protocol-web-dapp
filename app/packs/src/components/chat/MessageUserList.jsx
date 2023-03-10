@@ -22,9 +22,9 @@ const lastMessageText = lastMessage => {
   }
 };
 
-const ChatMessage = ({ chat, activeUserId, onClick }) => {
+const ChatMessage = ({ chat, activeUserUsername, onClick }) => {
   const message = lastMessageText(chat.last_message_text);
-  const active = chat.receiver_id == activeUserId ? " active" : "";
+  const active = chat.receiver_username == activeUserUsername ? " active" : "";
 
   const displayTime = () => {
     if (chat.last_message_at) {
@@ -35,9 +35,9 @@ const ChatMessage = ({ chat, activeUserId, onClick }) => {
   };
 
   return (
-    <a className={`pt-3 pl-6 pr-6 chat-user ${active} text-reset`} onClick={() => onClick(chat.receiver_id)}>
+    <a className={`pt-3 pl-6 pr-6 chat-user ${active} text-reset`} onClick={() => onClick(chat.receiver_username)}>
       <div className="d-flex flex-row justify-content-between themed-border-bottom">
-        <TalentProfilePicture src={chat.receiver_profile_picture_url} height={48} userId={chat.receiver_id} />
+        <TalentProfilePicture src={chat.receiver_profile_picture_url} height={48} />
         <div className="d-flex flex-column w-100 h-100 pl-2 pb-3 ml-2">
           <div style={{ minHeight: 48 }}>
             <div className="d-flex flex-row justify-content-between">
@@ -79,11 +79,10 @@ const EmptyChats = ({ mode }) => (
 const MessageUserList = ({
   chats,
   setChats,
-  activeUserId,
+  activeUserUsername,
   onClick,
   mode,
   mobile,
-  messengerWithTalent,
   supportersCount,
   loadMoreChats,
   showLoadMoreChats,
@@ -94,10 +93,9 @@ const MessageUserList = ({
   const [showNewMessageToAllSupporters, setShowNewMessageToAllSupporters] = useState(false);
 
   const onNewMessageUser = user => {
-    onClick(user.id);
-    const index = chats.findIndex(chat => chat.receiver_id == user.id);
+    onClick(user.username);
+    const index = chats.findIndex(chat => chat.receiver_username == user.username);
     const newChat = {
-      receiver_id: user.id,
       receiver_username: user.username,
       receiver_profile_picture_url: user.profilePictureUrl
     };
@@ -114,7 +112,7 @@ const MessageUserList = ({
   };
 
   const showMessageToAllSupporters = () => {
-    return messengerWithTalent && supportersCount > 0;
+    return supportersCount > 0;
   };
 
   return (
@@ -161,9 +159,9 @@ const MessageUserList = ({
           {chats.map(chat => (
             <ChatMessage
               onClick={onClick}
-              key={`user-message-list-${chat.receiver_id}`}
+              key={`user-message-list-${chat.receiver_username}`}
               chat={chat}
-              activeUserId={activeUserId}
+              activeUserUsername={activeUserUsername}
               mode={mode}
             />
           ))}

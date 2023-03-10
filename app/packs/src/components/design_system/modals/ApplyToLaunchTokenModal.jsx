@@ -7,7 +7,7 @@ import { patch } from "src/utils/requests";
 import { H5, P2 } from "src/components/design_system/typography";
 import { Alert } from "src/components/icons";
 
-const ApplyToLaunchTokenModal = ({ show, hide, userId, talentId, username }) => {
+const ApplyToLaunchTokenModal = ({ show, hide, userId, username }) => {
   const [loading, setLoading] = useState(false);
   const { mobile } = useWindowDimensionsHook();
 
@@ -20,7 +20,7 @@ const ApplyToLaunchTokenModal = ({ show, hide, userId, talentId, username }) => 
       }
     };
 
-    patch(`/api/v1/talent/${talentId}`, params)
+    patch(`/api/v1/talent/${userId}`, params)
       .then(() => window.location.replace(`/u/${username}`))
       .catch(e => console.log("error", e))
       .finally(() => setLoading(false));

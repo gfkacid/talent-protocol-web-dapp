@@ -225,7 +225,7 @@ export const TopBar = ({
   const userHasInvitesLeft = user.invitesLeft > 0;
 
   const walletConnectButton = () => (
-    <Web3ModalConnect user_id={user.id} onConnect={onWalletConnect} railsContext={railsContext} mode={theme.mode()} />
+    <Web3ModalConnect userId={user.id} onConnect={onWalletConnect} railsContext={railsContext} mode={theme.mode()} />
   );
 
   const stopImpersonation = () => {

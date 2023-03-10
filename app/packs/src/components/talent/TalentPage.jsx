@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
+import { loggedInUserStore } from "src/contexts/state";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 import { get } from "src/utils/requests";
@@ -26,7 +28,7 @@ import {
 
 import cx from "classnames";
 
-const TalentPage = ({ isAdminOrModerator, env }) => {
+const TalentPage = ({ env }) => {
   const theme = useContext(ThemeContext);
   const { mobile } = useWindowDimensionsHook();
   const url = new URL(document.location);
@@ -41,6 +43,15 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     lastPage: null
   });
   const [loading, setLoading] = useState(false);
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const isAdminOrModerator = currentUser?.admin || currentUser?.moderator;
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(document.location.search);

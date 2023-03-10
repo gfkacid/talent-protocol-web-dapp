@@ -37,7 +37,7 @@
     "80001": {
       "chainId": 80001,
       "chainName": "Polygon",
-      "factory": "0x228D74bCf10b9ad89600E70DE265653C9Da1B514",
+      "factory": "0xE23104E89fF4c93A677136C4cBdFD2037B35BE67",
       "staking": "0x3678cE749b0ffa5C62dd9b300148259d2DFAE572",
       "rpcURL": "https://matic-mumbai.chainstacklabs.com",
       "stableAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
@@ -88,5 +88,4 @@
       }
     }
   }
-  
 }

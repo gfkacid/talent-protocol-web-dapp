@@ -8,7 +8,7 @@ import { questDescription, taskReward, questRewards } from "src/utils/questsHelp
 
 import cx from "classnames";
 
-const QuestCard = ({ id, title, subtitle, type, allTasks, completedTasks, tasksType, status, withPersonaRequest }) => {
+const QuestCard = ({ title, subtitle, type, allTasks, completedTasks, tasksType, status, withPersonaRequest }) => {
   const progress = completedTasks / allTasks || 0;
 
   const buttonText = useMemo(() => {
@@ -64,7 +64,7 @@ const QuestCard = ({ id, title, subtitle, type, allTasks, completedTasks, tasksT
         </div>
         <div className="d-flex flex-column justify-content-center">
           <ProgressCircle
-            id={id}
+            type={type.toLowerCase()}
             width={58}
             progress={progress}
             completedTasks={completedTasks}
@@ -92,7 +92,7 @@ const QuestCard = ({ id, title, subtitle, type, allTasks, completedTasks, tasksT
               )
           )}
         </div>
-        <a className="button-link" href={`/quests/${id}`}>
+        <a className="button-link" href={`/quests/${type.replace("Quests::", "").toLowerCase()}`}>
           <Button
             className="w-100"
             disabled={completed || disableButton()}

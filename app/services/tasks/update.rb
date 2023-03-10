@@ -54,7 +54,8 @@ module Tasks
         recipient: user,
         type: notification_from(quest.type),
         source_id: user.id,
-        model_id: quest.id
+        model_id: quest.id,
+        extra_params: {type: quest.short_type}
       )
     end
 

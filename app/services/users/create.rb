@@ -13,7 +13,7 @@ module Users
         params[:invite] = invite if invite
         user = create_user(params)
 
-        create_talent(user)
+        create_talent(user, params)
         create_talent_token(user)
         create_invite_used_notification(invite, user) if invite
 
@@ -82,9 +82,19 @@ module Users
       }.compact
     end
 
-    def create_talent(user)
-      user.create_talent!
+    def create_talent(user, params)
+      talent = user.create_talent!
       user.talent.create_career_goal!
+      talent.update(gender: params[:gender])
+      talent.update(location: params[:location])
+      talent.update(nationality: params[:nationality])
+      talent.update(headline: params[:headline])
+
+      params[:tags].each do |description|
+        tag = Tag.find_or_create_by(description: description.downcase)
+        UserTag.find_or_create_by!(user: user, tag: tag)
+      end
+      CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
     end
 
     def create_talent_token(user)

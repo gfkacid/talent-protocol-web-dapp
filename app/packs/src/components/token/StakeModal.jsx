@@ -24,7 +24,7 @@ const StakeModal = ({
   tokenAddress,
   tokenId,
   userId,
-  talentUserId,
+  userUsername,
   talentName,
   mode,
   tokenChainId,
@@ -249,7 +249,7 @@ const StakeModal = ({
         setShow={setShowNewMessageModal}
         ticker={ticker}
         talentName={talentName}
-        talentId={talentUserId}
+        userUsername={userUsername}
         amountBought={amount * 10}
         mode={mode}
       />

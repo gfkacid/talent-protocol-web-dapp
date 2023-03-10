@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { railsContextStore } from "src/contexts/state";
+import { railsContextStore, loggedInUserStore } from "src/contexts/state";
 
 import TaskCard from "src/components/design_system/cards/TaskCard";
 import Button from "src/components/design_system/button";
@@ -11,12 +11,16 @@ import { questDescription } from "src/utils/questsHelpers";
 
 import cx from "classnames";
 
-const QuestShow = ({ quest, user, railsContext }) => {
+const QuestShow = ({ quest, railsContext }) => {
   const setRailsContext = railsContextStore(state => state.setRailsContext);
   const { mobile } = useWindowDimensionsHook();
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   useEffect(() => {
     setRailsContext(railsContext);
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
   }, []);
 
   return (
@@ -46,8 +50,9 @@ const QuestShow = ({ quest, user, railsContext }) => {
                 reward={task.reward}
                 link={task.link}
                 status={task.status}
-                userId={task.userId}
-                user={user}
+                userId={currentUser?.id}
+                userUsername={currentUser?.username}
+                userProfileType={currentUser?.profile_type}
               />
             </div>
           ))}

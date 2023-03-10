@@ -9,7 +9,6 @@
     <div class="secondary-content">
       <%= react_component("DiscoveryShow",
         props: {
-          isAdminOrModerator: current_user&.admin? || current_user&.moderator?,
           discoveryRow: {
             id: @discovery_row["id"],
             badge: @discovery_row["badge"],

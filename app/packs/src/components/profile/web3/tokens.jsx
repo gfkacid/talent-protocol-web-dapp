@@ -140,7 +140,7 @@ const Tokens = ({ user, canUpdate, setShowLastDivider, onWalletConnect, railsCon
                 </ThemedButton>
               ) : (
                 <Web3ModalConnect
-                  user_id={userId}
+                  userId={userId}
                   onConnect={onWalletConnect}
                   railsContext={railsContext}
                   buttonClassName="primary-default-button mx-auto"

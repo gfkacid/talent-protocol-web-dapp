@@ -18,7 +18,7 @@
     "@react-sigma/core": "^3.3.0",
     "@react-sigma/layout-circlepack": "^3.3.0",
     "@react-spring/web": "^9.2.4",
-    "@talentprotocol/design-system": "^0.0.0-switch-v1",
+    "@talentprotocol/design-system": "latest",
     "@transak/transak-sdk": "^1.0.30",
     "@uauth/js": "^2.4.0",
     "@uauth/web3modal": "^2.4.0",

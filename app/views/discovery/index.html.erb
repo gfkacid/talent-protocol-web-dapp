@@ -3,26 +3,6 @@
     <%= react_component("Discovery",
       props: {
         discoveryRows: @discovery_rows,
-        marketingArticles: @marketing_articles.map { |article| {
-          id: article["id"],
-          link: article["link"],
-          title: article["title"],
-          description: article["description"],
-          imgUrl: article["image_url"]
-        }},
-        user: {
-          id: current_user.id,
-          username: current_user.username,
-          beginnerQuestId: current_user.quests.find_by(type: "Quests::User").id,
-          supporterQuestId: current_user.quests.find_by(type: "Quests::Supporter").id,
-          walletId: current_user.wallet_id,
-          profileType: current_user.profile_type,
-          talent_id: current_user.talent.id,
-          talent: current_user.talent.present?,
-          tokenLaunched: current_user.talent&.talent_token&.deployed,
-          activeSupporter: current_user.active_supporter?,
-          verified: current_user.talent.verified?
-        }
       },
       prerender: false) %>
   </div>

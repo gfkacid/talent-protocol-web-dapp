@@ -17,7 +17,7 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   def validate_api_key
     return if internal_request? && api_key_from_headers.blank?
 
-    return unauthorized_request("API KEY header was not provided.") unless api_key_from_headers
+    return unauthorized_request("API KEY header was not provided.") unless api_key_from_headers.present?
     return unauthorized_request("API KEY provided is invalid.") unless api_key
     return unauthorized_request("API KEY provided was not activated or it was revoked.") unless api_key.active?
   end
@@ -100,6 +100,26 @@ class API::V1::PublicAPI::APIController < ActionController::Base
       response_body: response_body.to_json,
       response_code: response_code.is_a?(Symbol) ? Rack::Utils::SYMBOL_TO_STATUS_CODE[response_code] : response_code
     )
+  end
+
+  def internal_only
+    return if internal_request?
+
+    response_body = {error: "Endpoint unavailable."}
+    response_status = :bad_request
+
+    respond_to do |format|
+      format.json { render json: response_body, status: response_status }
+    end
+  end
+
+  def current_impersonated_user
+    @current_impersonated_user ||= user_from_impersonated_cookie
+    @current_impersonated_user
+  end
+
+  def user_from_impersonated_cookie
+    User.find_by(username: cookies.signed[:impersonated])
   end
 
   # Override pagy methods to use the :uuid database field for pagination

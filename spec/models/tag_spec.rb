@@ -4,7 +4,6 @@ RSpec.describe Tag, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:discovery_row).optional }
     it { is_expected.to have_many(:user_tags) }
-    it { is_expected.to have_many(:talents).through(:user_tags) }
   end
 
   describe "validations" do

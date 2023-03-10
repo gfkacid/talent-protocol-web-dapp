@@ -4,9 +4,6 @@ class DiscoveryController < ApplicationController
       DiscoveryRow.all.includes(:visible_tags, :partnership),
       view: :normal
     )
-
-    marketing_articles = MarketingArticle.all.order(created_at: :desc).limit(3)
-    @marketing_articles = MarketingArticleBlueprint.render_as_json(marketing_articles, view: :normal)
   end
 
   def show

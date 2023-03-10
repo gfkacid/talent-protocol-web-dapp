@@ -33,7 +33,13 @@ class UsersController < ApplicationController
         invite_code: user_params[:code],
         theme_preference: user_params[:theme_preference],
         legal_first_name: user_params[:legal_first_name],
-        legal_last_name: user_params[:legal_last_name]
+        legal_last_name: user_params[:legal_last_name],
+        headline: user_params[:headline],
+        gender: user_params[:gender],
+        location: user_params[:location],
+        nationality: user_params[:nationality],
+        career_needs: user_params[:career_needs],
+        tags: user_params[:tags]
       )
 
       if @result[:success]
@@ -82,7 +88,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:email, :username, :password, :code, :captcha, :mode, :theme_preference, :legal_first_name, :legal_last_name)
+    params.permit(:email, :username, :password, :code, :captcha, :mode, :theme_preference, :legal_first_name, :legal_last_name, :gender, :nationality, :location, :headline, career_needs: [], tags: [])
   end
 
   def verify_captcha

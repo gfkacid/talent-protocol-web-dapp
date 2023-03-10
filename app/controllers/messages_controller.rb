@@ -72,7 +72,6 @@ class MessagesController < ApplicationController
       readChat: @chat,
       messages: @messages.map(&:to_json),
       chat_id: @chat_id,
-      current_user_id: @sender.id,
       lastOnline: receiver.last_access_at,
       profilePictureUrl: receiver.profile_picture_url,
       username: receiver.username
@@ -129,14 +128,14 @@ class MessagesController < ApplicationController
     render json: {
       messages_sent: Sidekiq::Status.at(job_id),
       messages_total: Sidekiq::Status.total(job_id),
-      last_receiver_id: Sidekiq::Status.get(job_id, :last_receiver_id)
+      last_receiver_username: Sidekiq::Status.get(job_id, :last_receiver_username)
     }
   end
 
   private
 
   def receiver
-    @receiver ||= User.find(params[:id])
+    @receiver ||= User.find_by!("username = :id", id: params[:id])
   end
 
   def message_params
@@ -144,7 +143,7 @@ class MessagesController < ApplicationController
   end
 
   def user
-    @user ||= User.find_by(id: params[:user])
+    @user ||= User.find_by("username = :id", id: params[:user])
   end
 
   def job_id

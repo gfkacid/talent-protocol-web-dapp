@@ -1,4 +1,5 @@
 import create from "zustand";
+import { get } from "src/utils/requests";
 
 const messagesStore = create(set => ({
   messageCount: 0,
@@ -16,4 +17,13 @@ const urlStore = create(set => ({
   changeURL: newURL => set({ url: newURL })
 }));
 
-export { messagesStore, railsContextStore, urlStore };
+const loggedInUserStore = create(set => ({
+  currentUser: undefined,
+  loading: false,
+  fetchCurrentUser: async () => {
+    const response = await get("/api/v1/sessions/logged_in_user").catch(error => console.error(error));
+    set({ currentUser: response.user, loading: false });
+  }
+}));
+
+export { messagesStore, railsContextStore, urlStore, loggedInUserStore };

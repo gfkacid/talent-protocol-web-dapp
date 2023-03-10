@@ -5,6 +5,7 @@
   - high
   - default
   - mailers
+  - chewy
   - low
 :limits:
   low: 1

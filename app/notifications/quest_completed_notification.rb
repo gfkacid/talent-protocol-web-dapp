@@ -4,6 +4,6 @@ class QuestCompletedNotification < BaseNotification
   end
 
   def url
-    quest_url(params["model_id"]) if params["model_id"]
+    quest_url(params["type"]) if params["type"]
   end
 end

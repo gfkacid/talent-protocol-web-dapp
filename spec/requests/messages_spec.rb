@@ -30,7 +30,7 @@ RSpec.describe "Messages", type: :request do
           "id" => chat_2.id,
           "last_message_at" => chat_2.last_message_at.iso8601,
           "last_message_text" => chat_2.last_message_text,
-          "receiver_id" => user_2.id,
+          "receiver_id" => user_2.uuid,
           "receiver_last_online" => user_2.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_2.messaging_disabled,
           "receiver_profile_picture_url" => user_2.profile_picture_url,
@@ -43,7 +43,7 @@ RSpec.describe "Messages", type: :request do
           "id" => chat_1.id,
           "last_message_at" => chat_1.last_message_at.iso8601,
           "last_message_text" => chat_1.last_message_text,
-          "receiver_id" => user_1.id,
+          "receiver_id" => user_1.uuid,
           "receiver_last_online" => user_1.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_1.messaging_disabled,
           "receiver_profile_picture_url" => user_1.profile_picture_url,
@@ -56,7 +56,7 @@ RSpec.describe "Messages", type: :request do
           "id" => chat_3.id,
           "last_message_at" => chat_3.last_message_at.iso8601,
           "last_message_text" => chat_3.last_message_text,
-          "receiver_id" => user_3.id,
+          "receiver_id" => user_3.uuid,
           "receiver_last_online" => user_3.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_3.messaging_disabled,
           "receiver_profile_picture_url" => user_3.profile_picture_url,
@@ -84,7 +84,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_1.id,
             "last_message_at" => chat_1.last_message_at.iso8601,
             "last_message_text" => chat_1.last_message_text,
-            "receiver_id" => user_1.id,
+            "receiver_id" => user_1.uuid,
             "receiver_last_online" => user_1.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_1.messaging_disabled,
             "receiver_profile_picture_url" => user_1.profile_picture_url,
@@ -119,7 +119,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_2.id,
             "last_message_at" => chat_2.last_message_at.iso8601,
             "last_message_text" => chat_2.last_message_text,
-            "receiver_id" => user_2.id,
+            "receiver_id" => user_2.uuid,
             "receiver_last_online" => user_2.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_2.messaging_disabled,
             "receiver_profile_picture_url" => user_2.profile_picture_url,
@@ -132,7 +132,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_1.id,
             "last_message_at" => chat_1.last_message_at.iso8601,
             "last_message_text" => chat_1.last_message_text,
-            "receiver_id" => user_1.id,
+            "receiver_id" => user_1.uuid,
             "receiver_last_online" => user_1.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_1.messaging_disabled,
             "receiver_profile_picture_url" => user_1.profile_picture_url,
@@ -145,7 +145,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_3.id,
             "last_message_at" => chat_3.last_message_at.iso8601,
             "last_message_text" => chat_3.last_message_text,
-            "receiver_id" => user_3.id,
+            "receiver_id" => user_3.uuid,
             "receiver_last_online" => user_3.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_3.messaging_disabled,
             "receiver_profile_picture_url" => user_3.profile_picture_url,
@@ -158,7 +158,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_4.id,
             "last_message_at" => chat_4.last_message_at.iso8601,
             "last_message_text" => chat_4.last_message_text,
-            "receiver_id" => user_4.id,
+            "receiver_id" => user_4.uuid,
             "receiver_last_online" => user_4.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_4.messaging_disabled,
             "receiver_profile_picture_url" => user_4.profile_picture_url,
@@ -186,7 +186,7 @@ RSpec.describe "Messages", type: :request do
             "id" => chat_3.id,
             "last_message_at" => chat_3.last_message_at.iso8601,
             "last_message_text" => chat_3.last_message_text,
-            "receiver_id" => user_3.id,
+            "receiver_id" => user_3.uuid,
             "receiver_last_online" => user_3.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_3.messaging_disabled,
             "receiver_profile_picture_url" => user_3.profile_picture_url,
@@ -204,11 +204,11 @@ RSpec.describe "Messages", type: :request do
     let(:params) do
       {
         message: "Thanks for the support!",
-        id: receiver.id
+        id: receiver.username
       }
     end
 
-    let(:receiver) { create :user }
+    let!(:receiver) { create :user }
 
     let(:send_message_class) { Messages::Send }
     let(:send_message_instance) { instance_double(send_message_class, call: message_sent) }
@@ -240,7 +240,7 @@ RSpec.describe "Messages", type: :request do
       let(:params) do
         {
           message: "",
-          id: receiver.id
+          id: receiver.username
         }
       end
 
@@ -255,7 +255,7 @@ RSpec.describe "Messages", type: :request do
     context "when the message is not passed" do
       let(:params) do
         {
-          id: receiver.id
+          id: receiver.username
         }
       end
 
@@ -344,7 +344,7 @@ RSpec.describe "Messages", type: :request do
     before do
       allow(Sidekiq::Status).to receive(:at).and_return(2)
       allow(Sidekiq::Status).to receive(:total).and_return(5)
-      allow(Sidekiq::Status).to receive(:get).and_return(1)
+      allow(Sidekiq::Status).to receive(:get).and_return("dinis")
     end
 
     it "renders a json response with the messages sent" do
@@ -357,7 +357,7 @@ RSpec.describe "Messages", type: :request do
         {
           messages_sent: 2,
           messages_total: 5,
-          last_receiver_id: 1
+          last_receiver_username: "dinis"
         }
       )
     end

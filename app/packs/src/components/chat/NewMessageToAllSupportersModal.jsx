@@ -43,20 +43,20 @@ const NewMessageToAllSupportersModal = ({ show, setShow, mode, mobile }) => {
 
         if (response.messages_sent == response.messages_total && response.messages_total != 0) {
           setSendingMessage(false);
-          clearPollingInterval(response.last_receiver_id);
+          clearPollingInterval(response.last_receiver_username);
         }
       }
     });
   };
 
-  const clearPollingInterval = receiver_id => {
+  const clearPollingInterval = receiverUsername => {
     clearInterval(pollingIntervalId);
     setPollingIntervalId(null);
     setJobFinished(true);
 
     setTimeout(() => {
       setShow(false);
-      window.location.href = `/messages?user=${receiver_id}`;
+      window.location.href = `/messages?user=${receiverUsername}`;
     }, 3000);
   };
 

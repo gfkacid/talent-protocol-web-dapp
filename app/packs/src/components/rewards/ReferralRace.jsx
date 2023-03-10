@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import currency from "currency.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -18,15 +17,9 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);
 
-// eslint-disable-next-line no-unused-vars
-const sumRewardAmounts = (total, reward) => total + reward.amount;
-
-// eslint-disable-next-line no-unused-vars
-const amountToTal = amount => `${currency(amount).dollars()} $TAL`;
-
 dayjs.extend(utc);
 
-const RaceHeader = ({ isEligible, race }) => {
+const RaceHeader = ({ beginnerQuestCompleted, race }) => {
   const [timeUntilEnd, setTimeUntilEnd] = useState({
     days: 7,
     hours: 0,
@@ -73,7 +66,7 @@ const RaceHeader = ({ isEligible, race }) => {
   };
 
   useEffect(() => {
-    if (!isEligible) {
+    if (!beginnerQuestCompleted) {
       return;
     }
     updateTimeUntilEnd();
@@ -85,7 +78,7 @@ const RaceHeader = ({ isEligible, race }) => {
     return race && dayjs(race.started_at).utc() <= dayjs().utc();
   };
 
-  if (!isEligible) {
+  if (!beginnerQuestCompleted) {
     return (
       <div className="race-header-row">
         <div className="d-flex flex-column col-lg-5 px-4 px-lg-0">
@@ -492,10 +485,10 @@ const UserInvitesTable = ({ invitedUsers, loadMoreInvitedUsers, showLoadMoreInvi
 };
 
 const ReferralRace = ({
-  user,
+  username,
   allRaces,
   race,
-  isEligible,
+  beginnerQuestCompleted,
   leaderboardResults,
   invitedUsers,
   loadMoreInvitedUsers,
@@ -504,8 +497,8 @@ const ReferralRace = ({
 }) => {
   return (
     <div className="mt-6 mt-lg-7 d-flex flex-column">
-      <RaceHeader isEligible={isEligible} race={race} />
-      <Overview raceInvitesCount={raceInvitesCount} totalInvitesCount={invitedUsers.length} username={user.username} />
+      <RaceHeader beginnerQuestCompleted={beginnerQuestCompleted} race={race} />
+      <Overview raceInvitesCount={raceInvitesCount} totalInvitesCount={invitedUsers.length} username={username} />
       {race && <RaceTable leaderboardResults={leaderboardResults} allRaces={allRaces} currentRace={race} />}
       <UserInvitesTable
         invitedUsers={invitedUsers}

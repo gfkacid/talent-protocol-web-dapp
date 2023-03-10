@@ -9,6 +9,7 @@ dayjs.extend(customParseFormat);
 import TalentToken from "../abis/recent/TalentToken.json";
 import Staking from "../abis/recent/Staking.json";
 import TalentFactory from "../abis/recent/TalentFactory.json";
+import TalentFactoryV3 from "../abis/recent/TalentFactoryV3.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
 
@@ -134,7 +135,7 @@ class OnChain {
       console.log(error);
       // metamask mobile throws an error but that error has no code
       // https://github.com/MetaMask/metamask-mobile/issues/3312
-      if (!!error.code || error.code === 4902) {
+      if (!error.code || error.code === 4902) {
         const web3ModalInstance = await this.web3ModalConnect();
 
         await web3ModalInstance.request({
@@ -209,7 +210,7 @@ class OnChain {
       if (await this.recognizedChain()) {
         const factoryAddress = Addresses[this.env][chainId]["factory"];
 
-        this.talentFactory = new ethers.Contract(factoryAddress, TalentFactory.abi, provider);
+        this.talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
         return true;
       } else {
@@ -448,6 +449,32 @@ class OnChain {
       return ethers.utils.formatUnits(result);
     } else {
       return result;
+    }
+  }
+
+  async isAddressWhitelisted(address, chainId) {
+    const provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+
+    const factoryAddress = Addresses[this.env][chainId]["factory"];
+    const talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
+
+    return await talentFactory.whitelist(address);
+  }
+
+  async whitelistAddress(address) {
+    try {
+      if (!this.talentFactory) {
+        return;
+      }
+
+      const tx = await this.talentFactory.connect(this.signer).whitelistAddress(address);
+
+      await tx.wait();
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 

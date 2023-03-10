@@ -1,11 +1,7 @@
 <main class="main-content">
   <div class="container-grid">
     <div class="secondary-content">
-      <%= react_component("TalentPage",
-        props: {
-          isAdminOrModerator: current_user.admin? || current_user.moderator?
-        },
-        prerender: false) %>
+      <%= react_component("TalentPage", prerender: false) %>
     </div>
   </div>
 </main>

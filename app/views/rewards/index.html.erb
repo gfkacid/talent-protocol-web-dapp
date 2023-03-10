@@ -3,12 +3,6 @@
     <div class="secondary-content">
       <%= react_component("Rewards",
         props: {
-          user: {
-            isEligible: current_acting_user.beginner_quest_completed?,
-            username: current_acting_user.username,
-            id: current_acting_user.id,
-            talent_id: current_acting_user.talent.id
-          },
           allRaces: @races,
           invites: @invites,
           leaderboardResults: @race_leaderboard_results,

@@ -24,10 +24,6 @@
         props: {
           talent: @talent,
           profileSubdomain: tal_domain.present?,
-          currentUserId: current_acting_user&.id,
-          currentUserAdmin: current_user&.admin?,
-          currentUserModerator: current_user&.moderator?,
-          isCurrentUserImpersonated: is_user_impersonated?,
           withPersonaRequest: @with_persona_request
         },
         prerender: false

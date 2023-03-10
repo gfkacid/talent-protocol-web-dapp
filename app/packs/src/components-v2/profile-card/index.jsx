@@ -52,8 +52,8 @@ export const ProfileCard = ({
           <HeadlinePiece className="text-primary-01 mr-1" text="--E" />
           {headlineArray.map((word, index) => {
             if (talent.profile.highlightedHeadlineWordsIndex.includes(index))
-              return <HeadlinePiece className="text-primary mr-1" text={word} />;
-            return <HeadlinePiece className="text-primary-01 mr-1" text={word} />;
+              return <HeadlinePiece className="text-primary mr-1" text={word} key={index} />;
+            return <HeadlinePiece className="text-primary-01 mr-1" text={word} key={index} />;
           })}
         </>
       );

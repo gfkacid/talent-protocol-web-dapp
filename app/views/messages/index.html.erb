@@ -7,15 +7,7 @@
       lastPage: @pagy.last,
       recordsPerPage: @pagy.vars[:items]
     },
-    chats: @chats,
-    user: {
-      id: current_user.id,
-      username: current_user.username,
-      profilePictureUrl: current_user.profile_picture_url,
-      messagingDisabled: current_user.messaging_disabled,
-      withTalent: current_user.talent.present?,
-      supportersCount: current_user.talent&.supporters_count,
-    }
+    chats: @chats
   }, prerender: false, html_options: { class: "h-100" })
 %>
 </main>

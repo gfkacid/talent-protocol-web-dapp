@@ -1,12 +1,12 @@
 class UserBlueprint < Blueprinter::Base
   fields :id, :uuid
 
-  view :basic_with_pictures do
+  view :support do
     field :profilePictureUrl do |user, _options|
       user.profile_picture_url
     end
 
-    fields :username
+    fields :username, :email, :wallet_id, :email_confirmed_at, :created_at
   end
 
   view :normal do

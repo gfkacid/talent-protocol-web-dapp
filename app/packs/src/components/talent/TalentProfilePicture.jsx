@@ -25,7 +25,7 @@ const TalentProfilePicture = ({
       return src;
     } else if (!straight) {
       // eslint-disable-next-line no-undef
-      return require(`images/default-profile-icon-${Math.floor((userId || 0) % 5)}.png`);
+      return require(`images/default-profile-icon-${Math.floor(Math.random() * 5)}.png`);
     } else if (mode() === "light" && straight) {
       return DefaultBannerLight;
     } else if (mode() === "dark" && straight) {

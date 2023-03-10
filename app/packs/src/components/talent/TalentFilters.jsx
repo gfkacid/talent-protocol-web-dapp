@@ -37,7 +37,7 @@ const TalentFilters = ({ status, setStatus, filter, isAdminOrModerator = false }
       "Looking to hire",
       "Looking for new opportunities"
     ];
-  }, []);
+  }, [isAdminOrModerator]);
 
   const selectedClass = option => (option == status ? " text-primary" : "text-black");
 

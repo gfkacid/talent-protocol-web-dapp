@@ -5,14 +5,17 @@ module PublicAPIRoutes
         namespace :v1 do
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
-            resources :talents, only: [:show]
+            resources :talents, only: [:show, :index]
             resources :followers, only: [:index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]
+            resources :sessions, only: [] do
+              get :logged_in_user, on: :collection
+            end
           end
 
           # API non authenticated endpoints
-          resources :supporters, only: [:index]
+          resources :portfolio_supporters, only: [:index]
           resources :talent, only: [:show]
           get "/public_talent" => "talent#public_index"
 

@@ -2061,10 +2061,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@talentprotocol/design-system@^0.0.0-switch-v1":
-  version "0.0.0-switch-v6"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.0-switch-v6.tgz#bb0a61114e4ede90f01c2ca1e47561c485060400"
-  integrity sha512-6XNiREBM9qrLsGSVQBEm0YIVANSCTZfN85jTXr+hkzCMgQ9wxcT/5zL3g4FDTcFhKK30TcygLD4Cpg60FxA7ew==
+"@talentprotocol/design-system@latest":
+  version "0.0.45"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.45.tgz#ad529bc2478dd3072f26b8249aa2cb3c5fd01f6c"
+  integrity sha512-K4w8q3ieN5Wg+MPDfuHepcjmTBDHU+j8svXv2jssgP/l1F6Hybg8HHPcWNGCVip59l5o8Xgu5VBmjgIiYkhmRg==
 
 "@transak/transak-sdk@^1.0.30":
   version "1.0.31"

@@ -2,6 +2,10 @@ class API::ConnectionBlueprint < Blueprinter::Base
   view :normal do
     fields :user_invested_amount, :connected_user_invested_amount, :connection_type, :connected_at
 
+    field :id do |connection, _options|
+      connection.uuid
+    end
+
     field :username do |connection, _options|
       connection.connected_user.username
     end

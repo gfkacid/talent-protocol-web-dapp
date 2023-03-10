@@ -20,8 +20,8 @@ class Message < ApplicationRecord
   def to_json
     {
       id: id,
-      sender_id: sender_id,
-      receiver_id: receiver_id,
+      sender_id: sender.uuid,
+      receiver_id: receiver.uuid,
       created_at: created_at,
       updated_at: updated_at,
       text: text

@@ -4,14 +4,14 @@ require "sidekiq-scheduler/web"
 Rails.application.routes.draw do
   extend PublicAPIRoutes
   # Admin area
-  constraints Clearance::Constraints::SignedIn.new { |user| user.admin? } do
+  constraints Clearance::Constraints::SignedIn.new { |user| user&.admin? } do
     mount Sidekiq::Web => "/sidekiq"
     mount Blazer::Engine, at: "data-analytics"
   end
   # end Admin
 
   # Moderator area
-  constraints Clearance::Constraints::SignedIn.new { |user| user.moderator? || user.admin? } do
+  constraints Clearance::Constraints::SignedIn.new { |user| user&.moderator? || user&.admin? } do
     resource :support, only: [:show] do
       get :search
       resources :user, to: "supports#user_page", only: [:show]
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :persona_webhooks, only: [:create]
   end
 
-  constraints Clearance::Constraints::SignedIn.new { |user| !user.onboarding_complete? } do
+  constraints Clearance::Constraints::SignedIn.new { |user| !user&.onboarding_complete? } do
     root to: "onboarding#index", as: :onboarding_root
     post "/finish" => "onboarding#finish"
 
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   end
 
   # Business - require log-in
-  constraints Clearance::Constraints::SignedIn.new { |user| user.onboarding_complete? } do
+  constraints Clearance::Constraints::SignedIn.new { |user| user&.onboarding_complete? } do
     root to: "discovery#index", as: :user_root
     # file uploads
     unless Rails.env.test?
@@ -123,11 +123,10 @@ Rails.application.routes.draw do
   end
 
   constraints Routes::FormatConstraints.new(:html) do
-    get "/join(/:invite_code)" => "pages#home", :as => :sign_up
-    get "/" => "sessions#new", :as => "sign_in"
+    get "/join(/:invite_code)" => "onboard#sign_up", :as => :sign_up
+    get "/" => "onboard#sign_in"
     delete "/" => "sessions#new", :as => "sign_in_redirect"
     get "/confirm_email(/:token)" => "email_confirmations#update", :as => "confirm_email"
-    get "/sign_up", to: redirect("/join")
   end
 
   get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"
