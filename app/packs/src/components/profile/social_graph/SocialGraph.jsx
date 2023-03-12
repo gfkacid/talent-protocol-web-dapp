@@ -101,7 +101,7 @@ const SocialGraph = ({ talent }) => {
         : "",
       URL: `https://beta.talentprotocol.com/u/${talent.user.username}`,
       cluster: "0",
-      profile_picture_url: talent.profile_picture_url
+      profile_picture_url: talent.profile_picture_url,
       x: 0,
       y: 0,
       score: 1.5
